@@ -26,7 +26,7 @@ public class DockerVolumeTools {
     }
 
     @ReactiveTool(name = "docker_list_volumes",
-          description = "Elenca i volumi Docker")
+          description = "Lists Docker volumes")
     @SuppressWarnings("unchecked")
     public Mono<Map<String, Object>> listVolumes() {
         return webClient.get()
@@ -52,10 +52,10 @@ public class DockerVolumeTools {
     }
 
     @ReactiveTool(name = "docker_inspect_volume",
-          description = "Recupera i dettagli di un volume Docker")
+          description = "Retrieves details of a Docker volume")
     @SuppressWarnings("unchecked")
     public Mono<Map<String, Object>> inspectVolume(
-            @ToolParam(description = "Nome del volume") String name) {
+            @ToolParam(description = "Volume name") String name) {
         return webClient.get()
                 .uri(props.getApiBase() + "/volumes/" + name)
                 .retrieve()
@@ -65,10 +65,10 @@ public class DockerVolumeTools {
     }
 
     @ReactiveTool(name = "docker_create_volume",
-          description = "Crea un nuovo volume Docker")
+          description = "Creates a new Docker volume")
     @SuppressWarnings("unchecked")
     public Mono<Map<String, Object>> createVolume(
-            @ToolParam(description = "Nome del volume") String name,
+            @ToolParam(description = "Volume name") String name,
             @ToolParam(description = "Driver: local (default), nfs, etc.", required = false) String driver) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("Name", name);
@@ -87,10 +87,10 @@ public class DockerVolumeTools {
     }
 
     @ReactiveTool(name = "docker_remove_volume",
-          description = "Rimuove un volume Docker")
+          description = "Removes a Docker volume")
     public Mono<Map<String, Object>> removeVolume(
-            @ToolParam(description = "Nome del volume") String name,
-            @ToolParam(description = "Forza rimozione (default: false)", required = false) Boolean force) {
+            @ToolParam(description = "Volume name") String name,
+            @ToolParam(description = "Force removal (default: false)", required = false) Boolean force) {
         boolean f = force != null && force;
         return webClient.delete()
                 .uri(props.getApiBase() + "/volumes/" + name + "?force=" + f)

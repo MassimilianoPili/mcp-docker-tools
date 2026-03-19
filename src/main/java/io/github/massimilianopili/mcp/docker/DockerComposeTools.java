@@ -26,7 +26,7 @@ public class DockerComposeTools {
     }
 
     @ReactiveTool(name = "docker_list_compose_projects",
-          description = "Elenca i progetti Docker Compose rilevati dai container (basato sulla label com.docker.compose.project)")
+          description = "Lists Docker Compose projects detected from containers (based on com.docker.compose.project label)")
     @SuppressWarnings("unchecked")
     public Mono<List<Map<String, Object>>> listComposeProjects() {
         return webClient.get()
@@ -49,7 +49,7 @@ public class DockerComposeTools {
                                 .count();
                         result.put("running", running);
                         result.put("stopped", entry.getValue().size() - running);
-                        // Prendi la working dir dal primo container se disponibile
+                        // Get working dir from the first container if available
                         Map<String, String> firstLabels = (Map<String, String>) entry.getValue().get(0).getOrDefault("Labels", Map.of());
                         result.put("workingDir", firstLabels.getOrDefault("com.docker.compose.project.working_dir", ""));
                         return result;
@@ -59,10 +59,10 @@ public class DockerComposeTools {
     }
 
     @ReactiveTool(name = "docker_get_compose_project",
-          description = "Mostra lo stato dei container di un progetto Docker Compose")
+          description = "Shows the container status of a Docker Compose project")
     @SuppressWarnings("unchecked")
     public Mono<List<Map<String, Object>>> getComposeProject(
-            @ToolParam(description = "Nome del progetto Docker Compose") String projectName) {
+            @ToolParam(description = "Docker Compose project name") String projectName) {
         String filter = "%7B%22label%22%3A%5B%22com.docker.compose.project%3D" + projectName + "%22%5D%7D";
         return webClient.get()
                 .uri(props.getApiBase() + "/containers/json?all=true&filters=" + filter)

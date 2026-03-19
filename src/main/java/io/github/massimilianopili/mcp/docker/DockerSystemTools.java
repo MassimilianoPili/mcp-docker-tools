@@ -25,7 +25,7 @@ public class DockerSystemTools {
     }
 
     @ReactiveTool(name = "docker_system_info",
-          description = "Recupera le informazioni di sistema del Docker Engine (versione, OS, container, immagini, storage)")
+          description = "Retrieves Docker Engine system information (version, OS, containers, images, storage)")
     @SuppressWarnings("unchecked")
     public Mono<Map<String, Object>> systemInfo() {
         return webClient.get()
@@ -54,7 +54,7 @@ public class DockerSystemTools {
     }
 
     @ReactiveTool(name = "docker_version",
-          description = "Recupera la versione del Docker Engine e dei componenti")
+          description = "Retrieves Docker Engine and component versions")
     @SuppressWarnings("unchecked")
     public Mono<Map<String, Object>> version() {
         return webClient.get()
@@ -66,7 +66,7 @@ public class DockerSystemTools {
     }
 
     @ReactiveTool(name = "docker_ping",
-          description = "Verifica se il Docker Engine e' raggiungibile")
+          description = "Checks if the Docker Engine is reachable")
     public Mono<Map<String, Object>> ping() {
         return webClient.get()
                 .uri(props.getApiBase() + "/_ping")
@@ -77,7 +77,7 @@ public class DockerSystemTools {
     }
 
     @ReactiveTool(name = "docker_disk_usage",
-          description = "Mostra l'utilizzo disco di container, immagini, volumi e build cache (docker system df)")
+          description = "Shows disk usage for containers, images, volumes and build cache (docker system df)")
     @SuppressWarnings("unchecked")
     public Mono<Map<String, Object>> diskUsage() {
         return webClient.get()
@@ -89,10 +89,10 @@ public class DockerSystemTools {
     }
 
     @ReactiveTool(name = "docker_prune_system",
-          description = "Pulisce le risorse Docker inutilizzate (container fermi, reti non usate, immagini dangling, build cache). ATTENZIONE: operazione distruttiva!")
+          description = "Prunes unused Docker resources (stopped containers, unused networks, dangling images, build cache). WARNING: destructive operation!")
     @SuppressWarnings("unchecked")
     public Mono<Map<String, Object>> pruneSystem(
-            @ToolParam(description = "true per rimuovere anche tutte le immagini inutilizzate (non solo dangling, default: false)", required = false) Boolean all) {
+            @ToolParam(description = "true to also remove all unused images, not just dangling (default: false)", required = false) Boolean all) {
         boolean pruneAll = all != null && all;
 
         Mono<Map<String, Object>> pruneContainers = webClient.post()

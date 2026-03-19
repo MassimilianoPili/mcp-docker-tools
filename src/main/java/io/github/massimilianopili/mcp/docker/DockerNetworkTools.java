@@ -26,7 +26,7 @@ public class DockerNetworkTools {
     }
 
     @ReactiveTool(name = "docker_list_networks",
-          description = "Elenca le reti Docker")
+          description = "Lists Docker networks")
     @SuppressWarnings("unchecked")
     public Mono<List<Map<String, Object>>> listNetworks() {
         return webClient.get()
@@ -47,10 +47,10 @@ public class DockerNetworkTools {
     }
 
     @ReactiveTool(name = "docker_inspect_network",
-          description = "Recupera i dettagli di una rete Docker con i container connessi")
+          description = "Retrieves details of a Docker network including connected containers")
     @SuppressWarnings("unchecked")
     public Mono<Map<String, Object>> inspectNetwork(
-            @ToolParam(description = "ID o nome della rete") String id) {
+            @ToolParam(description = "Network ID or name") String id) {
         return webClient.get()
                 .uri(props.getApiBase() + "/networks/" + id)
                 .retrieve()
@@ -60,10 +60,10 @@ public class DockerNetworkTools {
     }
 
     @ReactiveTool(name = "docker_create_network",
-          description = "Crea una nuova rete Docker")
+          description = "Creates a new Docker network")
     @SuppressWarnings("unchecked")
     public Mono<Map<String, Object>> createNetwork(
-            @ToolParam(description = "Nome della rete") String name,
+            @ToolParam(description = "Network name") String name,
             @ToolParam(description = "Driver: bridge, overlay, macvlan (default: bridge)", required = false) String driver) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("Name", name);
@@ -86,9 +86,9 @@ public class DockerNetworkTools {
     }
 
     @ReactiveTool(name = "docker_remove_network",
-          description = "Rimuove una rete Docker")
+          description = "Removes a Docker network")
     public Mono<Map<String, Object>> removeNetwork(
-            @ToolParam(description = "ID o nome della rete") String id) {
+            @ToolParam(description = "Network ID or name") String id) {
         return webClient.delete()
                 .uri(props.getApiBase() + "/networks/" + id)
                 .retrieve()
@@ -98,10 +98,10 @@ public class DockerNetworkTools {
     }
 
     @ReactiveTool(name = "docker_connect_container",
-          description = "Connette un container a una rete Docker")
+          description = "Connects a container to a Docker network")
     public Mono<Map<String, Object>> connectContainer(
-            @ToolParam(description = "ID o nome della rete") String networkId,
-            @ToolParam(description = "ID o nome del container") String containerId) {
+            @ToolParam(description = "Network ID or name") String networkId,
+            @ToolParam(description = "Container ID or name") String containerId) {
         return webClient.post()
                 .uri(props.getApiBase() + "/networks/" + networkId + "/connect")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -113,11 +113,11 @@ public class DockerNetworkTools {
     }
 
     @ReactiveTool(name = "docker_disconnect_container",
-          description = "Disconnette un container da una rete Docker")
+          description = "Disconnects a container from a Docker network")
     public Mono<Map<String, Object>> disconnectContainer(
-            @ToolParam(description = "ID o nome della rete") String networkId,
-            @ToolParam(description = "ID o nome del container") String containerId,
-            @ToolParam(description = "Forza disconnessione (default: false)", required = false) Boolean force) {
+            @ToolParam(description = "Network ID or name") String networkId,
+            @ToolParam(description = "Container ID or name") String containerId,
+            @ToolParam(description = "Force disconnection (default: false)", required = false) Boolean force) {
         boolean f = force != null && force;
         return webClient.post()
                 .uri(props.getApiBase() + "/networks/" + networkId + "/disconnect")

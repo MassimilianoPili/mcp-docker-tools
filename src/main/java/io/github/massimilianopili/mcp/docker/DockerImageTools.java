@@ -25,10 +25,10 @@ public class DockerImageTools {
     }
 
     @ReactiveTool(name = "docker_list_images",
-          description = "Elenca le immagini Docker locali")
+          description = "Lists local Docker images")
     @SuppressWarnings("unchecked")
     public Mono<List<Map<String, Object>>> listImages(
-            @ToolParam(description = "true per includere immagini intermedie (default: false)", required = false) Boolean all) {
+            @ToolParam(description = "true to include intermediate images (default: false)", required = false) Boolean all) {
         boolean showAll = all != null && all;
         return webClient.get()
                 .uri(props.getApiBase() + "/images/json?all=" + showAll)
@@ -47,10 +47,10 @@ public class DockerImageTools {
     }
 
     @ReactiveTool(name = "docker_inspect_image",
-          description = "Recupera i dettagli di un'immagine Docker")
+          description = "Retrieves details of a Docker image")
     @SuppressWarnings("unchecked")
     public Mono<Map<String, Object>> inspectImage(
-            @ToolParam(description = "Nome o ID dell'immagine") String name) {
+            @ToolParam(description = "Image name or ID") String name) {
         return webClient.get()
                 .uri(props.getApiBase() + "/images/" + name + "/json")
                 .retrieve()
@@ -60,10 +60,10 @@ public class DockerImageTools {
     }
 
     @ReactiveTool(name = "docker_pull_image",
-          description = "Scarica un'immagine da un registry Docker",
+          description = "Pulls an image from a Docker registry",
           timeoutMs = 120000)
     public Mono<Map<String, Object>> pullImage(
-            @ToolParam(description = "Nome immagine, es: nginx, redis, ubuntu") String image,
+            @ToolParam(description = "Image name, e.g.: nginx, redis, ubuntu") String image,
             @ToolParam(description = "Tag (default: latest)", required = false) String tag) {
         String t = (tag != null && !tag.isBlank()) ? tag : "latest";
         return webClient.post()
@@ -81,11 +81,11 @@ public class DockerImageTools {
     }
 
     @ReactiveTool(name = "docker_remove_image",
-          description = "Rimuove un'immagine Docker locale")
+          description = "Removes a local Docker image")
     @SuppressWarnings("unchecked")
     public Mono<Map<String, Object>> removeImage(
-            @ToolParam(description = "Nome o ID dell'immagine") String name,
-            @ToolParam(description = "Forza rimozione (default: false)", required = false) Boolean force) {
+            @ToolParam(description = "Image name or ID") String name,
+            @ToolParam(description = "Force removal (default: false)", required = false) Boolean force) {
         boolean f = force != null && force;
         return webClient.delete()
                 .uri(props.getApiBase() + "/images/" + name + "?force=" + f)
@@ -96,11 +96,11 @@ public class DockerImageTools {
     }
 
     @ReactiveTool(name = "docker_tag_image",
-          description = "Aggiunge un tag a un'immagine Docker")
+          description = "Tags a Docker image")
     public Mono<Map<String, Object>> tagImage(
-            @ToolParam(description = "Immagine sorgente (nome o ID)") String source,
-            @ToolParam(description = "Repository target, es: myrepo/myimage") String repo,
-            @ToolParam(description = "Tag, es: v1.0") String tag) {
+            @ToolParam(description = "Source image (name or ID)") String source,
+            @ToolParam(description = "Target repository, e.g.: myrepo/myimage") String repo,
+            @ToolParam(description = "Tag, e.g.: v1.0") String tag) {
         return webClient.post()
                 .uri(props.getApiBase() + "/images/" + source + "/tag?repo=" + repo + "&tag=" + tag)
                 .retrieve()
@@ -110,10 +110,10 @@ public class DockerImageTools {
     }
 
     @ReactiveTool(name = "docker_image_history",
-          description = "Mostra la cronologia dei layer di un'immagine Docker")
+          description = "Shows the layer history of a Docker image")
     @SuppressWarnings("unchecked")
     public Mono<List<Map<String, Object>>> imageHistory(
-            @ToolParam(description = "Nome o ID dell'immagine") String name) {
+            @ToolParam(description = "Image name or ID") String name) {
         return webClient.get()
                 .uri(props.getApiBase() + "/images/" + name + "/history")
                 .retrieve()
@@ -131,10 +131,10 @@ public class DockerImageTools {
     }
 
     @ReactiveTool(name = "docker_search_images",
-          description = "Cerca immagini su Docker Hub")
+          description = "Searches for images on Docker Hub")
     @SuppressWarnings("unchecked")
     public Mono<List<Map<String, Object>>> searchImages(
-            @ToolParam(description = "Termine di ricerca") String term) {
+            @ToolParam(description = "Search term") String term) {
         return webClient.get()
                 .uri(props.getApiBase() + "/images/search?term=" + term)
                 .retrieve()
