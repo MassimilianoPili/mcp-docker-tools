@@ -13,6 +13,7 @@ import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.netty.http.client.HttpClient;
+import reactor.netty.tcp.TcpClient;
 
 import java.io.File;
 
@@ -28,8 +29,9 @@ public class DockerConfig {
 
         if (props.isUnixSocket()) {
             log.info("Docker WebClient: connessione via Unix socket {}", props.getUnixSocketPath());
-            httpClient = HttpClient.create()
+            TcpClient tcpClient = TcpClient.create()
                     .remoteAddress(() -> new DomainSocketAddress(props.getUnixSocketPath()));
+            httpClient = HttpClient.from(tcpClient);
         } else {
             String host = props.getHost();
             log.info("Docker WebClient: connessione via TCP {}", host);
